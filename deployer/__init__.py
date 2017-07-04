@@ -24,7 +24,7 @@ def incoming():
 
         command = config['command']
         env = config['environment']
-        nenv = os.environment.copy()
+        nenv = os.environ.copy()
         nenv.update(env)
         p = Popen(command, shell=True, env=nenv)
         ret = p.wait()
