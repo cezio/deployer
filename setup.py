@@ -19,7 +19,7 @@ setup(
     classifiers=[
         'Development Status :: 1 - Planning',
     ],
-    license="BSD",
+    license="MIT",
     keywords="flask github deployment infrastructure git",
     url='',
     packages=['deployer',],
