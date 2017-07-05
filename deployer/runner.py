@@ -6,7 +6,6 @@ import sys
 from six.moves.configparser import SafeConfigParser as ConfigParser
 import filelock
 from subprocess import Popen
-import daemon
 
 def main(config_path):
     flock = filelock.FileLock('{}.lock'.format(config_path))
