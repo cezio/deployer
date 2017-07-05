@@ -3,7 +3,7 @@
 
 import os
 import sys
-from configparser import SafeConfigParser as ConfigParser
+from six.moves.configparser import SafeConfigParser as ConfigParser
 import filelock
 from subprocess import Popen
 
