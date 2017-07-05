@@ -17,19 +17,17 @@ def main():
             config = ConfigParser()
             config.readfp(f)
 
-        if config is None:
-            print('no deployment config in {}'.format(config_path))
-            return 1
-        
         command = config.get('deployment', 'command')
-        
+        logto = config.get('deployment', 'log')
+        if logto:
+            command = '({}) 2>&1 >> {}'.format(command, logto)
         env = {}
         if config.has_section('environment'):
             for k, v in config.items('environment'):
                 env[k] = v
         nenv = os.environ.copy()
         nenv.update(env)
-
+        print('running command', command)
         p = Popen(command, shell=True, env=nenv)
         ret = p.wait()
 
