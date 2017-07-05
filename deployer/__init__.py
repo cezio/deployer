@@ -1,37 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import json
-from subprocess import Popen
+import os, sys
+import subprocess
 
 from flask import Flask, Response, request
 
 app = Flask('deployer')
 
-
-
-@app.route('/incoming/', methods=["POST"])
-def incoming():
+@app.route('/incoming/<deployment_name>/', methods=["POST"])
+def incoming(deployment_name):
     r = request
     config_path = os.environ.get('DEPLOYER_CONFIG')
     if not config_path:
-        return Response(response='no deployment config', status=500)
+        return Response(response='no deployment config path', status=500)
+    final_path = os.path.join(config_path, '{}.conf'.format(deployment_name))
+    if not os.path.exists(final_path):
+        return Response(response='no deployment config', status=404)
+    command = '({} -m deployer.runner {}) & '.format(sys.executable, final_path)
+    subprocess.call(command, shell=True)
     response = 'ok'
-    code = 200
-    with open(config_path, 'rt') as f:
-        config = json.load(f)
-
-        command = config['command']
-        env = config['environment']
-        nenv = os.environ.copy()
-        nenv.update(env)
-        p = Popen(command, shell=True, env=nenv)
-        ret = p.wait()
-        if ret:
-            code=500
-            response='error during execution: {}'.format(ret)
-
+    status = 200
     r = Response(response=response, status=code)
     return r
 
