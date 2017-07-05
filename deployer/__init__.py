@@ -21,7 +21,7 @@ def incoming(deployment_name):
     subprocess.call(command, shell=True)
     response = 'ok'
     status = 200
-    r = Response(response=response, status=code)
+    r = Response(response=response, status=status)
     return r
 
 
