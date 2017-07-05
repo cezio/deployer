@@ -6,6 +6,8 @@ import subprocess
 
 from flask import Flask, Response, request
 
+from deployer.runner import run_child
+
 app = Flask('deployer')
 
 @app.route('/incoming/<deployment_name>/', methods=["POST"])
@@ -17,8 +19,7 @@ def incoming(deployment_name):
     final_path = os.path.join(config_path, '{}.conf'.format(deployment_name))
     if not os.path.exists(final_path):
         return Response(response='no deployment config', status=404)
-    command = '(nohup {} -m deployer.runner {}) & '.format(sys.executable, final_path)
-    subprocess.call(command, shell=True)
+    run_child(final_path)
     response = 'ok'
     status = 200
     r = Response(response=response, status=status)
