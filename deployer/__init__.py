@@ -17,7 +17,7 @@ def incoming(deployment_name):
     final_path = os.path.join(config_path, '{}.conf'.format(deployment_name))
     if not os.path.exists(final_path):
         return Response(response='no deployment config', status=404)
-    command = '({} -m deployer.runner {}) & '.format(sys.executable, final_path)
+    command = '(nohup {} -m deployer.runner {}) & '.format(sys.executable, final_path)
     subprocess.call(command, shell=True)
     response = 'ok'
     status = 200

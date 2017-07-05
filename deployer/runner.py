@@ -7,8 +7,7 @@ from six.moves.configparser import SafeConfigParser as ConfigParser
 import filelock
 from subprocess import Popen
 
-def main():
-    config_path = sys.argv[-1]
+def main(config_path):
     flock = filelock.FileLock('{}.lock'.format(config_path))
     flock.timeout = 3*60
     with flock:
@@ -35,4 +34,5 @@ def main():
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    config_path = sys.argv[-1]
+    sys.exit(main(config_path))
